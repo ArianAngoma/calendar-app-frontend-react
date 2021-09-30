@@ -4,6 +4,9 @@ import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
 import moment from 'moment';
 
+/* Importaciones propias */
+import {useForm} from '../../hooks/useForm';
+
 /* Estilos del Modal */
 const customStyles = {
     content: {
@@ -28,6 +31,15 @@ export const CalendarModal = () => {
     const [dateStart, setDateStart] = useState(now.toDate());
     const [dateEnd, setDateEnd] = useState(end.toDate());
 
+    /* Obtener información del formulario */
+    const [formValues, handleInputChange, reset] = useForm({
+        title: 'Event',
+        notes: '',
+        start: now.toDate(),
+        end: end.toDate()
+    })
+    const {title, notes} = formValues;
+
     /* Cerrar Modal */
     const closeModal = () => {
 
@@ -37,12 +49,29 @@ export const CalendarModal = () => {
     const handleStartDateChange = (e) => {
         // console.log(e);
         setDateStart(e);
+
+        /* Cambiar el estado si cambia la fecha de inicio */
+        reset({
+            ...formValues,
+            start: e
+        })
     }
 
     /* Fin de fecha */
     const handleEndDateChange = (e) => {
         // console.log(e);
         setDateEnd(e);
+
+        /* Cambiar el estado si cambia la fecha de fin */
+        reset({
+            ...formValues,
+            end: e
+        })
+    }
+
+    const handleSubmitForm = (e) => {
+        e.preventDefault();
+        // console.log(formValues);
     }
 
     return (
@@ -58,7 +87,8 @@ export const CalendarModal = () => {
                 <h1> Nuevo evento </h1>
                 <hr/>
 
-                <form className="container">
+                <form className="container"
+                      onSubmit={handleSubmitForm}>
 
                     <div className="form-group">
                         <label>Fecha de inicio</label>
@@ -90,7 +120,9 @@ export const CalendarModal = () => {
                             className="form-control"
                             placeholder="Título del evento"
                             name="title"
-                            autoComplete="off"/>
+                            autoComplete="off"
+                            onChange={handleInputChange}
+                            value={title}/>
                         <small id="emailHelp" className="form-text text-muted">Una descripción corta</small>
                     </div>
 
@@ -99,7 +131,9 @@ export const CalendarModal = () => {
                             className="form-control"
                             placeholder="Notas"
                             rows="5"
-                            name="notes"/>
+                            name="notes"
+                            onChange={handleInputChange}
+                            value={notes}/>
                         <small id="emailHelp" className="form-text text-muted">Información adicional</small>
                     </div>
 
