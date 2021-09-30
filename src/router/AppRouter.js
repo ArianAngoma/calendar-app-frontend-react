@@ -3,7 +3,7 @@ import {
     Switch,
     Route,
     Redirect
-} from "react-router-dom";
+} from 'react-router-dom';
 
 /* Importaciones propias */
 import {LoginScreen} from "../components/auth/LoginScreen";

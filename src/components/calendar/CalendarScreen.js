@@ -1,14 +1,14 @@
-import {useState} from "react";
+import {useState} from 'react';
 
 import {Calendar, momentLocalizer} from 'react-big-calendar'
 import moment from 'moment';
 import 'moment/locale/es';
 
 /* Importaciones propias */
-import {Navbar} from "../ui/Navbar";
-import {messages} from "../../helpers/calendar-messages-es";
-import {CalendarEvent} from "./CalendarEvent";
-import {CalendarModal} from "./CalendarModal";
+import {Navbar} from '../ui/Navbar';
+import {messages} from '../../helpers/calendar-messages-es';
+import {CalendarEvent} from './CalendarEvent';
+import {CalendarModal} from './CalendarModal';
 
 /* Importacion del estilo de BigCalendar */
 import 'react-big-calendar/lib/css/react-big-calendar.css';

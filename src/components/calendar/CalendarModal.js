@@ -1,8 +1,8 @@
-import {useState} from "react";
+import {useState} from 'react';
 
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
-import moment from "moment";
+import moment from 'moment';
 
 /* Estilos del Modal */
 const customStyles = {
@@ -61,7 +61,7 @@ export const CalendarModal = () => {
                 <form className="container">
 
                     <div className="form-group">
-                        <label>Fecha y hora inicio</label>
+                        <label>Fecha de inicio</label>
                         <DateTimePicker
                             onChange={handleStartDateChange}
                             value={dateStart}
@@ -71,7 +71,7 @@ export const CalendarModal = () => {
                     </div>
 
                     <div className="form-group">
-                        <label>Fecha y hora fin</label>
+                        <label>Fecha de fin</label>
                         <DateTimePicker
                             onChange={handleEndDateChange}
                             value={dateEnd}
