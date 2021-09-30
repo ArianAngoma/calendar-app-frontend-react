@@ -1,5 +1,6 @@
 import {useState} from 'react';
 
+import {useDispatch, useSelector} from 'react-redux';
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
 import moment from 'moment';
@@ -7,6 +8,7 @@ import Swal from 'sweetalert2';
 
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
+import {uiCloseModal} from '../../actions/ui';
 
 /* Estilos del Modal */
 const customStyles = {
@@ -29,9 +31,17 @@ const now = moment();
 const end = now.clone().add('1', 'days');
 
 export const CalendarModal = () => {
+    /* dispatch de Redux */
+    const dispatch = useDispatch();
+
+    /* Estado del modal */
+    const {modalOpen} = useSelector(state => state.ui);
+
+    /* Estados de las fechas */
     const [dateStart, setDateStart] = useState(now.toDate());
     const [dateEnd, setDateEnd] = useState(end.toDate());
 
+    /* Estado del título del formulario */
     const [titleValid, setTitleValid] = useState(true);
 
     /* Obtener información del formulario */
@@ -45,7 +55,7 @@ export const CalendarModal = () => {
 
     /* Cerrar Modal */
     const closeModal = () => {
-
+        dispatch(uiCloseModal());
     }
 
     /* Inicio de fecha */
@@ -95,7 +105,7 @@ export const CalendarModal = () => {
     return (
         <div>
             <Modal
-                isOpen={true}
+                isOpen={modalOpen}
                 onRequestClose={closeModal}
                 style={customStyles}
                 closeTimeoutMS={200}

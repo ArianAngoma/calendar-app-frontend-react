@@ -1,5 +1,6 @@
 import {useState} from 'react';
 
+import {useDispatch} from 'react-redux';
 import {Calendar, momentLocalizer} from 'react-big-calendar'
 import moment from 'moment';
 import 'moment/locale/es';
@@ -9,6 +10,7 @@ import {Navbar} from '../ui/Navbar';
 import {messages} from '../../helpers/calendar-messages-es';
 import {CalendarEvent} from './CalendarEvent';
 import {CalendarModal} from './CalendarModal';
+import {uiOpenModal} from '../../actions/ui';
 
 /* Importacion del estilo de BigCalendar */
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -24,7 +26,6 @@ const events = [{
     title: 'Cumpleaños de Arian',
     start: moment().toDate(), // new Date()
     end: moment().toDate(),
-    allDay: true,
     bgColor: '#fafafa',
     user: {
         _id: '123',
@@ -33,11 +34,16 @@ const events = [{
 }]
 
 export const CalendarScreen = () => {
+    /* dispatch de Redux */
+    const dispatch = useDispatch();
+
+    /* Estado de la última vista */
     const [lasView, setLastView] = useState(localStorage.getItem('last-view') || 'month');
 
     /* Evento al hacer doble click */
     const onDoubleClick = (e) => {
-        console.log(e);
+        // console.log(e);
+        dispatch(uiOpenModal());
     }
 
     /* Evento al seleccionar el evento */
