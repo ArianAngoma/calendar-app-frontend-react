@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import Modal from 'react-modal';
@@ -10,10 +10,10 @@ import Swal from 'sweetalert2';
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
 import {uiCloseModal} from '../../actions/ui';
+import {eventAddNew, eventClearActiveEvent} from '../../actions/events';
 
 /* Estilos del DatePicker */
 import 'react-datepicker/dist/react-datepicker.css';
-import {eventAddNew} from '../../actions/events';
 
 /* Estilos del Modal */
 const customStyles = {
@@ -38,12 +38,22 @@ const now = moment().minutes(0).seconds(0).add(1, 'hours');
 /* Fecha final */
 const end = now.clone().add(1, 'hours');
 
+/* Estado inicial del evento */
+const initEvent = {
+    title: '',
+    notes: '',
+    star: now.toDate(),
+    end: end.toDate()
+}
+
 export const CalendarModal = () => {
     /* dispatch de Redux */
     const dispatch = useDispatch();
 
     /* Estado del modal */
     const {modalOpen} = useSelector(state => state.ui);
+    /* Estado del activeEvent */
+    const {activeEvent} = useSelector(state => state.calendar);
 
     /* Estados de las fechas */
     const [dateStart, setDateStart] = useState(now.toDate());
@@ -53,17 +63,24 @@ export const CalendarModal = () => {
     const [titleValid, setTitleValid] = useState(true);
 
     /* Obtener información del formulario */
-    const [formValues, handleInputChange, reset] = useForm({
-        title: 'Event',
-        notes: '',
-        start: now.toDate(),
-        end: end.toDate()
-    })
+    const [formValues, handleInputChange, reset] = useForm(initEvent)
     const {title, notes, start, end: endDate} = formValues;
+
+    /* Cambiar la información de formValues con la información de activeEvent */
+    useEffect(() => {
+        // console.log(activeEvent);
+        if (activeEvent) reset(activeEvent);
+    }, [activeEvent, reset]);
 
     /* Cerrar Modal */
     const closeModal = () => {
         dispatch(uiCloseModal());
+
+        /* Limpiar evento activo */
+        dispatch(eventClearActiveEvent());
+
+        /* Limpiar formValues */
+        reset(initEvent);
     }
 
     /* Inicio de fecha */

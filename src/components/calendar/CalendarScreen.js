@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Calendar, momentLocalizer} from 'react-big-calendar'
 import moment from 'moment';
 import 'moment/locale/es';
@@ -23,22 +23,13 @@ moment.locale('es');
 /* Configuración de react big calendar */
 const localizer = momentLocalizer(moment);
 
-/* Lista de eventos */
-const events = [{
-    title: 'Cumpleaños de Arian',
-    start: moment().toDate(), // new Date()
-    end: moment().add(2, 'hours').toDate(),
-    bgColor: '#fafafa',
-    notes: 'Comprar pastel',
-    user: {
-        _id: '123',
-        name: 'Angoma'
-    }
-}]
-
 export const CalendarScreen = () => {
     /* dispatch de Redux */
     const dispatch = useDispatch();
+
+    /* Leer eventos del Store */
+    const {events} = useSelector(state => state.calendar);
+    // console.log(events);
 
     /* Estado de la última vista */
     const [lasView, setLastView] = useState(localStorage.getItem('last-view') || 'month');
@@ -53,7 +44,6 @@ export const CalendarScreen = () => {
     const onSelectEvent = (e) => {
         // console.log(e);
         dispatch(eventSetActive(e));
-        dispatch(uiOpenModal());
     }
 
     /* Evento para seleccionar la vista */

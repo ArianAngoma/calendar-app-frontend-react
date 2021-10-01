@@ -24,6 +24,12 @@ export const calendarReducer = (state = initialState, action) => {
                 ...state,
                 activeEvent: action.payload
             }
+        /* Limpiar evento activo */
+        case types.eventClearActiveEvent:
+            return {
+                ...state,
+                activeEvent: null
+            }
         /* Agregar un nuevo evento al state */
         case types.eventAddNew:
             return {
