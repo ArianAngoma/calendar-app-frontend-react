@@ -13,6 +13,7 @@ import {uiCloseModal} from '../../actions/ui';
 
 /* Estilos del DatePicker */
 import 'react-datepicker/dist/react-datepicker.css';
+import {eventAddNew} from '../../actions/events';
 
 /* Estilos del Modal */
 const customStyles = {
@@ -102,6 +103,16 @@ export const CalendarModal = () => {
         /* Validar el título */
         if (title.trim().length < 2) return setTitleValid(false);
         else setTitleValid(true);
+
+        /* Grabar un nuevo evento */
+        dispatch(eventAddNew({
+            ...formValues,
+            id: new Date().getTime(),
+            user: {
+                _id: '123',
+                name: 'Angoma'
+            }
+        }));
 
         /* Cerrar el modal */
         closeModal();
