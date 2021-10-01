@@ -7,10 +7,12 @@ import 'moment/locale/es';
 
 /* Importaciones propias */
 import {Navbar} from '../ui/Navbar';
+import {AddNewFab} from '../ui/AddNewFab';
 import {messages} from '../../helpers/calendar-messages-es';
 import {CalendarEvent} from './CalendarEvent';
 import {CalendarModal} from './CalendarModal';
 import {uiOpenModal} from '../../actions/ui';
+import {eventSetActive} from '../../actions/events';
 
 /* Importacion del estilo de BigCalendar */
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -27,6 +29,7 @@ const events = [{
     start: moment().toDate(), // new Date()
     end: moment().add(2, 'hours').toDate(),
     bgColor: '#fafafa',
+    notes: 'Comprar pastel',
     user: {
         _id: '123',
         name: 'Angoma'
@@ -48,7 +51,9 @@ export const CalendarScreen = () => {
 
     /* Evento al seleccionar el evento */
     const onSelectEvent = (e) => {
-        console.log(e);
+        // console.log(e);
+        dispatch(eventSetActive(e));
+        dispatch(uiOpenModal());
     }
 
     /* Evento para seleccionar la vista */
@@ -92,6 +97,8 @@ export const CalendarScreen = () => {
                 components={{
                     event: CalendarEvent
                 }}/>
+
+            <AddNewFab/>
 
             <CalendarModal/>
         </div>
