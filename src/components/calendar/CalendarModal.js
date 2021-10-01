@@ -2,13 +2,17 @@ import {useState} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import Modal from 'react-modal';
-import DateTimePicker from 'react-datetime-picker';
+import DatePicker, {registerLocale} from 'react-datepicker';
+import es from 'date-fns/locale/es';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
 import {uiCloseModal} from '../../actions/ui';
+
+/* Estilos del DatePicker */
+import 'react-datepicker/dist/react-datepicker.css';
 
 /* Estilos del Modal */
 const customStyles = {
@@ -25,10 +29,13 @@ const customStyles = {
 /* Configuración del Modal */
 Modal.setAppElement('#root');
 
+/* Configuración del idioma de DatePicker */
+registerLocale('es', es);
+
 /* Fecha inicial */
-const now = moment();
+const now = moment().minutes(0).seconds(0).add(1, 'hours');
 /* Fecha final */
-const end = now.clone().add('1', 'days');
+const end = now.clone().add(1, 'hours');
 
 export const CalendarModal = () => {
     /* dispatch de Redux */
@@ -90,16 +97,14 @@ export const CalendarModal = () => {
         const momentEnd = moment(endDate);
 
         /* Validar las fechas */
-        if (momentStart.isAfter(momentEnd)) Swal.fire('Error', 'La fecha fin debe de ser mayor o igual a la fecha de inicio', 'error');
+        if (momentStart.isSameOrAfter(momentEnd)) return Swal.fire('Error', 'La fecha fin debe de ser mayor o igual a la fecha de inicio', 'error');
 
         /* Validar el título */
-        if (title.trim().length < 2) setTitleValid(false);
-
-        setTitleValid(true);
+        if (title.trim().length < 2) return setTitleValid(false);
+        else setTitleValid(true);
 
         /* Cerrar el modal */
         closeModal();
-
     }
 
     return (
@@ -120,23 +125,31 @@ export const CalendarModal = () => {
 
                     <div className="form-group">
                         <label>Fecha de inicio</label>
-                        <DateTimePicker
+                        <DatePicker
+                            locale="es"
+                            selected={dateStart}
                             onChange={handleStartDateChange}
-                            value={dateStart}
                             className="form-control"
-                            disableClock={true}
-                            format="y-MM-dd"/>
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={20}
+                            timeCaption="time"
+                            dateFormat="MMM d, yyyy h:mm aa"/>
                     </div>
 
                     <div className="form-group">
                         <label>Fecha de fin</label>
-                        <DateTimePicker
+                        <DatePicker
+                            locale="es"
+                            selected={dateEnd}
                             onChange={handleEndDateChange}
-                            value={dateEnd}
                             className="form-control"
-                            disableClock={true}
-                            minDate={dateStart}
-                            format="y-MM-dd"/>
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={20}
+                            timeCaption="time"
+                            dateFormat="MMM d, yyyy h:mm aa"
+                            minDate={dateStart}/>
                     </div>
 
                     <hr/>

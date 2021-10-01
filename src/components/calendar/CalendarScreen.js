@@ -25,7 +25,7 @@ const localizer = momentLocalizer(moment);
 const events = [{
     title: 'Cumpleaños de Arian',
     start: moment().toDate(), // new Date()
-    end: moment().toDate(),
+    end: moment().add(2, 'hours').toDate(),
     bgColor: '#fafafa',
     user: {
         _id: '123',
