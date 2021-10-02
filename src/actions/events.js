@@ -17,3 +17,9 @@ export const eventAddNew = (event) => ({
     type: types.eventAddNew,
     payload: event
 });
+
+/* Actualizar evento */
+export const eventUpdated = (event) => ({
+    type: types.eventUpdated,
+    payload: event
+});

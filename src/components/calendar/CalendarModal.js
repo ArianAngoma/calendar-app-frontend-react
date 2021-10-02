@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
 import {uiCloseModal} from '../../actions/ui';
-import {eventAddNew, eventClearActiveEvent} from '../../actions/events';
+import {eventAddNew, eventClearActiveEvent, eventUpdated} from '../../actions/events';
 
 /* Estilos del DatePicker */
 import 'react-datepicker/dist/react-datepicker.css';
@@ -70,7 +70,8 @@ export const CalendarModal = () => {
     useEffect(() => {
         // console.log(activeEvent);
         if (activeEvent) reset(activeEvent);
-    }, [activeEvent, reset]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeEvent]);
 
     /* Cerrar Modal */
     const closeModal = () => {
@@ -121,15 +122,20 @@ export const CalendarModal = () => {
         if (title.trim().length < 2) return setTitleValid(false);
         else setTitleValid(true);
 
-        /* Grabar un nuevo evento */
-        dispatch(eventAddNew({
-            ...formValues,
-            id: new Date().getTime(),
-            user: {
-                _id: '123',
-                name: 'Angoma'
-            }
-        }));
+        if (activeEvent) {
+            /* Actualizar evento */
+            dispatch(eventUpdated(formValues));
+        } else {
+            /* Grabar un nuevo evento */
+            dispatch(eventAddNew({
+                ...formValues,
+                id: new Date().getTime(),
+                user: {
+                    _id: '123',
+                    name: 'Angoma'
+                }
+            }));
+        }
 
         /* Cerrar el modal */
         closeModal();
@@ -160,7 +166,7 @@ export const CalendarModal = () => {
                             className="form-control"
                             showTimeSelect
                             timeFormat="HH:mm"
-                            timeIntervals={20}
+                            timeIntervals={60}
                             timeCaption="time"
                             dateFormat="MMM d, yyyy h:mm aa"/>
                     </div>
@@ -174,7 +180,7 @@ export const CalendarModal = () => {
                             className="form-control"
                             showTimeSelect
                             timeFormat="HH:mm"
-                            timeIntervals={20}
+                            timeIntervals={60}
                             timeCaption="time"
                             dateFormat="MMM d, yyyy h:mm aa"
                             minDate={dateStart}/>
