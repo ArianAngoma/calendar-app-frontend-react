@@ -42,7 +42,7 @@ const end = now.clone().add(1, 'hours');
 const initEvent = {
     title: '',
     notes: '',
-    star: now.toDate(),
+    start: now.toDate(),
     end: end.toDate()
 }
 
@@ -57,6 +57,7 @@ export const CalendarModal = () => {
 
     /* Estados de las fechas */
     const [dateStart, setDateStart] = useState(now.toDate());
+    // eslint-disable-next-line
     const [dateEnd, setDateEnd] = useState(end.toDate());
 
     /* Estado del título del formulario */
@@ -167,7 +168,7 @@ export const CalendarModal = () => {
                                     <label>Fecha de inicio</label>
                                     <DatePicker
                                         locale="es"
-                                        selected={dateStart}
+                                        selected={start}
                                         onChange={handleStartDateChange}
                                         className="form-control"
                                         showTimeSelect
@@ -181,7 +182,7 @@ export const CalendarModal = () => {
                                     <label>Fecha de fin</label>
                                     <DatePicker
                                         locale="es"
-                                        selected={dateEnd}
+                                        selected={endDate}
                                         onChange={handleEndDateChange}
                                         className="form-control"
                                         showTimeSelect
