@@ -51,7 +51,7 @@ export const CalendarModal = () => {
     const dispatch = useDispatch();
 
     /* Estado del modal */
-    const {modalOpen} = useSelector(state => state.ui);
+    const {modalOpen, startDate, endDate: endDateModal} = useSelector(state => state.ui);
     /* Estado del activeEvent */
     const {activeEvent} = useSelector(state => state.calendar);
 
@@ -131,6 +131,8 @@ export const CalendarModal = () => {
             dispatch(eventAddNew({
                 ...formValues,
                 id: new Date().getTime(),
+                start: startDate || formValues.start,
+                end: endDateModal || formValues.end,
                 user: {
                     _id: '123',
                     name: 'Angoma'
@@ -158,36 +160,42 @@ export const CalendarModal = () => {
                 <form className="container"
                       onSubmit={handleSubmitForm}>
 
-                    <div className="form-group">
-                        <label>Fecha de inicio</label>
-                        <DatePicker
-                            locale="es"
-                            selected={dateStart}
-                            onChange={handleStartDateChange}
-                            className="form-control"
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={60}
-                            timeCaption="time"
-                            dateFormat="MMM d, yyyy h:mm aa"/>
-                    </div>
+                    {
+                        (!startDate && !endDateModal) && (
+                            <div>
+                                <div className="form-group">
+                                    <label>Fecha de inicio</label>
+                                    <DatePicker
+                                        locale="es"
+                                        selected={dateStart}
+                                        onChange={handleStartDateChange}
+                                        className="form-control"
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={60}
+                                        timeCaption="time"
+                                        dateFormat="MMM d, yyyy h:mm aa"/>
+                                </div>
 
-                    <div className="form-group">
-                        <label>Fecha de fin</label>
-                        <DatePicker
-                            locale="es"
-                            selected={dateEnd}
-                            onChange={handleEndDateChange}
-                            className="form-control"
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={60}
-                            timeCaption="time"
-                            dateFormat="MMM d, yyyy h:mm aa"
-                            minDate={dateStart}/>
-                    </div>
+                                <div className="form-group">
+                                    <label>Fecha de fin</label>
+                                    <DatePicker
+                                        locale="es"
+                                        selected={dateEnd}
+                                        onChange={handleEndDateChange}
+                                        className="form-control"
+                                        showTimeSelect
+                                        timeFormat="HH:mm"
+                                        timeIntervals={60}
+                                        timeCaption="time"
+                                        dateFormat="MMM d, yyyy h:mm aa"
+                                        minDate={dateStart}/>
+                                </div>
 
-                    <hr/>
+                                <hr/>
+                            </div>
+                        )
+                    }
 
                     <div className="form-group">
                         <label>Titulo y notas</label>

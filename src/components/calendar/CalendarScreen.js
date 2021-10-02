@@ -12,7 +12,7 @@ import {DeleteEventFab} from '../ui/DeleteEventFab';
 import {messages} from '../../helpers/calendar-messages-es';
 import {CalendarEvent} from './CalendarEvent';
 import {CalendarModal} from './CalendarModal';
-import {uiOpenModal} from '../../actions/ui';
+import {uiOpenModal, uiOpenModalWithSlotCalendar} from '../../actions/ui';
 import {eventClearActiveEvent, eventSetActive} from '../../actions/events';
 
 /* Importacion del estilo de BigCalendar */
@@ -59,7 +59,12 @@ export const CalendarScreen = () => {
     /* Evento para seleccionar un slot del calendar */
     const onSelectSlot = (e) => {
         // console.log(e);
-        dispatch(eventClearActiveEvent());
+
+        /* Limpiar actievent */
+        if (activeEvent) return dispatch(eventClearActiveEvent());
+
+        /* Abrir modal con fecha selecionada en el calendar */
+        dispatch(uiOpenModalWithSlotCalendar(e.start, e.end));
     }
 
     /* Evento para dar estilos a la nota */
