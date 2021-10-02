@@ -23,3 +23,8 @@ export const eventUpdated = (event) => ({
     type: types.eventUpdated,
     payload: event
 });
+
+/* Eliminar Evento */
+export const eventDeleted = () => ({
+    type: types.eventDeleted
+});

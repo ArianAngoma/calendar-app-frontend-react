@@ -70,6 +70,7 @@ export const CalendarModal = () => {
     useEffect(() => {
         // console.log(activeEvent);
         if (activeEvent) reset(activeEvent);
+        else reset(initEvent);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeEvent]);
 
@@ -151,7 +152,7 @@ export const CalendarModal = () => {
                 className="modal"
                 overlayClassName="modal-bottom">
 
-                <h1> Nuevo evento </h1>
+                <h1> {(activeEvent) ? 'Editar evento' : 'Nuevo evento'} </h1>
                 <hr/>
 
                 <form className="container"

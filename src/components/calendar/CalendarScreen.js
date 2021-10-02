@@ -8,11 +8,12 @@ import 'moment/locale/es';
 /* Importaciones propias */
 import {Navbar} from '../ui/Navbar';
 import {AddNewFab} from '../ui/AddNewFab';
+import {DeleteEventFab} from '../ui/DeleteEventFab';
 import {messages} from '../../helpers/calendar-messages-es';
 import {CalendarEvent} from './CalendarEvent';
 import {CalendarModal} from './CalendarModal';
 import {uiOpenModal} from '../../actions/ui';
-import {eventSetActive} from '../../actions/events';
+import {eventClearActiveEvent, eventSetActive} from '../../actions/events';
 
 /* Importacion del estilo de BigCalendar */
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -28,7 +29,7 @@ export const CalendarScreen = () => {
     const dispatch = useDispatch();
 
     /* Leer eventos del Store */
-    const {events} = useSelector(state => state.calendar);
+    const {events, activeEvent} = useSelector(state => state.calendar);
     // console.log(events);
 
     /* Estado de la última vista */
@@ -53,6 +54,12 @@ export const CalendarScreen = () => {
         /* Actualizar y guardar la última vista en el localStorage */
         setLastView(e);
         localStorage.setItem('last-view', e);
+    }
+
+    /* Evento para seleccionar un slot del calendar */
+    const onSelectSlot = (e) => {
+        // console.log(e);
+        dispatch(eventClearActiveEvent());
     }
 
     /* Evento para dar estilos a la nota */
@@ -83,12 +90,20 @@ export const CalendarScreen = () => {
                 onDoubleClickEvent={onDoubleClick}
                 onSelectEvent={onSelectEvent}
                 onView={onViewChange}
+                onSelectSlot={onSelectSlot}
+                selectable={true}
                 view={lasView}
                 components={{
                     event: CalendarEvent
                 }}/>
 
             <AddNewFab/>
+
+            {
+                (activeEvent) && (
+                    <DeleteEventFab/>
+                )
+            }
 
             <CalendarModal/>
         </div>
