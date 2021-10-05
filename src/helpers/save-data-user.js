@@ -5,17 +5,17 @@ import {login} from '../actions/auth';
 
 export const saveDataUser = (data, dispatch) => {
     if (data.ok) {
-        localStorage.setItem('x-token', data.user.token);
+        localStorage.setItem('token', data.token);
         localStorage.setItem('token-init-date', new Date().getTime());
 
         /* Acción al login */
         dispatch(login({
-            uid: data.user.uid,
-            name: data.user.name,
-            color: data.user.color
+            uid: data.uid,
+            name: data.name,
+            color: data.color
         }));
     } else {
-        if (data.msg) return Swal.fire('Error', data.msg, 'error');
+        if (data.msg) Swal.fire('Error', data.msg, 'error');
         else {
             for (const error in data.errors) {
                 // console.log(data.errors[error].msg)

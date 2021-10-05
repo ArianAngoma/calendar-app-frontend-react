@@ -1,7 +1,8 @@
 /* Importaciones propias */
-import {fetchNoToken} from '../helpers/fetch';
+import {fetchNoToken, fetchWithToken} from '../helpers/fetch';
 import {types} from '../types/types';
 import {saveDataUser} from '../helpers/save-data-user';
+import Swal from 'sweetalert2';
 
 /* acción para el inicio del login  */
 export const startLogin = (email, password) => {
@@ -10,7 +11,7 @@ export const startLogin = (email, password) => {
         const data = await resp.json();
         // console.log(data);
 
-        saveDataUser(data, dispatch);
+        await saveDataUser(data, dispatch);
     }
 }
 
@@ -24,10 +25,46 @@ export const startRegister = (email, password, name) => {
         const data = await resp.json();
         // console.log(data);
 
-        saveDataUser(data, dispatch);
+        await saveDataUser(data, dispatch);
     }
 }
 
+/* Acción para validar el TOKEN */
+export const startChecking = () => {
+    return async (dispatch) => {
+        const resp = await fetchWithToken('auth/renew-token');
+        const data = await resp.json();
+        // console.log(data);
+
+        if (data.ok) {
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('token-init-date', new Date().getTime());
+
+            /* Acción al login */
+            dispatch(login({
+                uid: data.uid,
+                name: data.name,
+                color: data.color
+            }));
+        } else {
+            if (data.msg) Swal.fire('Error', data.msg, 'error');
+            else {
+                for (const error in data.errors) {
+                    // console.log(data.errors[error].msg)
+                    Swal.fire('Error', data.errors[error].msg, 'error');
+                }
+            }
+            dispatch(checkingFinish());
+        }
+    }
+}
+
+/* Acción para finalizar la carga si el usuario esta logueado */
+export const checkingFinish = () => ({
+    type: types.authCheckingFinish
+})
+
+/* Acción para editar el store con el usuario logueado */
 export const login = (user) => ({
     type: types.authLogin,
     payload: user

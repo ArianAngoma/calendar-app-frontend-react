@@ -10,11 +10,18 @@ const initialState = {
 
 export const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        /* Guardar usuario en el store */
         case types.authLogin:
             return {
                 ...state,
-                checking: false,
-                ...action.payload
+                ...action.payload,
+                checking: false
+            }
+        /* Cambiar el store auth en finalizado si el usuario esta loguedo */
+        case types.authCheckingFinish:
+            return {
+                ...state,
+                checking: false
             }
         default:
             return state;
