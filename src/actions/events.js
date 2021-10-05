@@ -1,6 +1,7 @@
 /* Importaciones propias */
 import {types} from '../types/types';
 import {fetchWithToken} from '../helpers/fetch';
+import {prepareEvent} from '../helpers/prepare-event';
 
 /* Activar la nota del state calendar.events */
 export const eventSetActive = (event) => ({
@@ -53,3 +54,26 @@ export const eventUpdated = (event) => ({
 export const eventDeleted = () => ({
     type: types.eventDeleted
 });
+
+/* Obtener todos los eventos de la base de datos */
+export const eventStartLoading = () => {
+    return async (dispatch) => {
+        try {
+            const resp = await fetchWithToken('events');
+            const data = await resp.json();
+            // console.log(data);
+
+            const events = prepareEvent(data.events);
+            // console.log(events)
+            dispatch(eventLoaded(events));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
+/* Editar el store de los eventos */
+export const eventLoaded = (events) => ({
+    type: types.eventLoaded,
+    payload: events
+})

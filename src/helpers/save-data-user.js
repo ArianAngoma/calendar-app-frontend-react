@@ -11,8 +11,7 @@ export const saveDataUser = (data, dispatch) => {
         /* Acción al login */
         dispatch(login({
             uid: data.uid,
-            name: data.name,
-            color: data.color
+            name: data.name
         }));
     } else {
         if (data.msg) Swal.fire('Error', data.msg, 'error');

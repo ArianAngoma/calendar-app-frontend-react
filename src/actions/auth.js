@@ -17,10 +17,7 @@ export const startLogin = (email, password) => {
 /* Acción para el inicio del Registro */
 export const startRegister = (email, password, name) => {
     return async (dispatch) => {
-        /* Generar color random para el calendario */
-        const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-
-        const resp = await fetchNoToken('auth/register', {email, password, name, color: randomColor}, 'POST');
+        const resp = await fetchNoToken('auth/register', {email, password, name}, 'POST');
         const data = await resp.json();
         // console.log(data);
 
@@ -42,8 +39,7 @@ export const startChecking = () => {
             /* Acción al login */
             dispatch(login({
                 uid: data.uid,
-                name: data.name,
-                color: data.color
+                name: data.name
             }));
         } else {
             dispatch(checkingFinish());

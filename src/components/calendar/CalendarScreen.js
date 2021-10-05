@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {Calendar, momentLocalizer} from 'react-big-calendar'
@@ -13,7 +13,7 @@ import {messages} from '../../helpers/calendar-messages-es';
 import {CalendarEvent} from './CalendarEvent';
 import {CalendarModal} from './CalendarModal';
 import {uiOpenModal, uiOpenModalWithSlotCalendar} from '../../actions/ui';
-import {eventClearActiveEvent, eventSetActive} from '../../actions/events';
+import {eventClearActiveEvent, eventSetActive, eventStartLoading} from '../../actions/events';
 
 /* Importacion del estilo de BigCalendar */
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -31,9 +31,16 @@ export const CalendarScreen = () => {
     /* Leer eventos del Store */
     const {events, activeEvent} = useSelector(state => state.calendar);
     // console.log(events);
+    /* Leer usuario del Store */
+    const {uid} = useSelector(state => state.auth);
 
     /* Estado de la última vista */
     const [lasView, setLastView] = useState(localStorage.getItem('last-view') || 'month');
+
+    /* Efecto para obtener todos los eventos al cargar el componente */
+    useEffect(() => {
+        dispatch(eventStartLoading());
+    }, [dispatch]);
 
     /* Evento al hacer doble click */
     const onDoubleClick = (e) => {
@@ -72,7 +79,7 @@ export const CalendarScreen = () => {
         // console.log(event, start, end, isSelected);
         return {
             style: {
-                backgroundColor: '#367CF7',
+                backgroundColor: (uid === event.user._id) ? '#367CF7' : '#465660',
                 borderRadius: '0px',
                 opacity: 0.8,
                 display: 'block',
