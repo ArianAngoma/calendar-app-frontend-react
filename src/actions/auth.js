@@ -2,7 +2,6 @@
 import {fetchNoToken, fetchWithToken} from '../helpers/fetch';
 import {types} from '../types/types';
 import {saveDataUser} from '../helpers/save-data-user';
-import Swal from 'sweetalert2';
 
 /* acción para el inicio del login  */
 export const startLogin = (email, password) => {
@@ -47,13 +46,6 @@ export const startChecking = () => {
                 color: data.color
             }));
         } else {
-            if (data.msg) Swal.fire('Error', data.msg, 'error');
-            else {
-                for (const error in data.errors) {
-                    // console.log(data.errors[error].msg)
-                    Swal.fire('Error', data.errors[error].msg, 'error');
-                }
-            }
             dispatch(checkingFinish());
         }
     }
