@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
 import {uiCloseModal} from '../../actions/ui';
-import {eventAddNew, eventClearActiveEvent, eventUpdated} from '../../actions/events';
+import {eventClearActiveEvent, eventStartAddNew, eventUpdated} from '../../actions/events';
 
 /* Estilos del DatePicker */
 import 'react-datepicker/dist/react-datepicker.css';
@@ -129,15 +129,10 @@ export const CalendarModal = () => {
             dispatch(eventUpdated(formValues));
         } else {
             /* Grabar un nuevo evento */
-            dispatch(eventAddNew({
+            dispatch(eventStartAddNew({
                 ...formValues,
-                id: new Date().getTime(),
                 start: startDate || formValues.start,
-                end: endDateModal || formValues.end,
-                user: {
-                    _id: '123',
-                    name: 'Angoma'
-                }
+                end: endDateModal || formValues.end
             }));
         }
 

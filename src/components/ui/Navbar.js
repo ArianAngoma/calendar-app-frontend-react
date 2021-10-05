@@ -10,6 +10,7 @@ export const Navbar = () => {
     const {name} = useSelector(state => state.auth);
 
     /* Logout del usuario */
+    /* Se realiza el logout porque en el AppRouter esta pendiente del checking y uid vuelve a cargar el componente */
     const handleLogout = () => {
         dispatch(startLogout());
     }
