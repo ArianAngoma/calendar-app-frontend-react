@@ -13,8 +13,8 @@ export const LoginScreen = () => {
 
     /* useForm para el formulario del login */
     const [formLoginValues, handleLoginInputChange] = useForm({
-        loginEmail: 'test1@gmail.com',
-        loginPassword: '123456'
+        loginEmail: '',
+        loginPassword: ''
     });
     const {loginEmail, loginPassword} = formLoginValues;
 
@@ -28,10 +28,10 @@ export const LoginScreen = () => {
 
     /* useForm para el formulario del registro */
     const [formRegisterValues, handleRegisterInputChange] = useForm({
-        registerName: 'Test3',
-        registerEmail: 'test3@gmail.com',
-        registerPassword1: '123456',
-        registerPassword2: '123456'
+        registerName: '',
+        registerEmail: '',
+        registerPassword1: '',
+        registerPassword2: ''
     });
     const {registerName, registerEmail, registerPassword1, registerPassword2} = formRegisterValues;
 
