@@ -1,7 +1,7 @@
 import {useDispatch} from 'react-redux';
 
 /* Importaciones propias */
-import {eventDeleted} from '../../actions/events';
+import {eventStartDelete} from '../../actions/events';
 
 export const DeleteEventFab = () => {
     /* dispatch de Redux */
@@ -9,7 +9,8 @@ export const DeleteEventFab = () => {
 
     /* Función para disparar la acción de eliminar el evento del store */
     const handleDelete = () => {
-        dispatch(eventDeleted());
+        // dispatch(eventDeleted()); -> antes de integrar con el backend
+        dispatch(eventStartDelete());
     }
 
     return (

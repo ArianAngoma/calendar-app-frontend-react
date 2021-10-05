@@ -129,6 +129,17 @@ export const CalendarModal = () => {
             // dispatch(eventUpdated(formValues)); -> antes de integrar con el backend
             dispatch(eventStartUpdate(formValues));
         } else {
+            /* dispatch(eventStartAddNew({
+                 ...formValues,
+                 id: new Date().getTime(),
+                 start: startDate || formValues.start,
+                 end: endDateModal || formValues.end,
+                 user: {
+                     _id: '123',
+                     name: 'Angoma'
+                 }
+             }));  -> antes de integrar con el backend */
+
             /* Grabar un nuevo evento */
             dispatch(eventStartAddNew({
                 ...formValues,

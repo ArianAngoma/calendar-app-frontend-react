@@ -2,6 +2,7 @@
 import {fetchNoToken, fetchWithToken} from '../helpers/fetch';
 import {types} from '../types/types';
 import {saveDataUser} from '../helpers/save-data-user';
+import {eventLogout} from './events';
 
 /* acción para el inicio del login  */
 export const startLogin = (email, password) => {
@@ -62,6 +63,9 @@ export const login = (user) => ({
 export const startLogout = () => {
     return (dispatch) => {
         localStorage.clear();
+
+        /* Limpiar store de calendar */
+        dispatch(eventLogout());
 
         dispatch(logout());
     }

@@ -77,6 +77,33 @@ export const eventUpdated = (event) => ({
     payload: event
 });
 
+/* Inicio para la eliminación de un evento en la DB */
+export const eventStartDelete = () => {
+    return async (dispatch, getState) => {
+        const {id} = getState().calendar.activeEvent;
+        // console.log(id);
+        try {
+            // console.log(event);
+            const resp = await fetchWithToken(`events/${id}`, {}, 'DELETE');
+            const data = await resp.json();
+            // console.log(data);
+            if (data.ok) {
+                dispatch(eventDeleted());
+            } else {
+                if (data.msg) Swal.fire('Error', data.msg, 'error');
+                else {
+                    for (const error in data.errors) {
+                        // console.log(data.errors[error].msg)
+                        Swal.fire('Error', data.errors[error].msg, 'error');
+                    }
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
+
 /* Eliminar Evento */
 export const eventDeleted = () => ({
     type: types.eventDeleted
@@ -103,4 +130,9 @@ export const eventStartLoading = () => {
 export const eventLoaded = (events) => ({
     type: types.eventLoaded,
     payload: events
-})
+});
+
+/* Limpiar eventos al hacer logout */
+export const eventLogout = () => ({
+    type: types.eventLogout
+});

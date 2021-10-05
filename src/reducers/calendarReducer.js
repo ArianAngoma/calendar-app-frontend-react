@@ -5,11 +5,11 @@ import {types} from '../types/types';
     title: 'Cumpleaños de Arian',
     start: moment().toDate(),
     end: moment().add(2, 'hours').toDate(),
-    bgColor: '#fafafa',
     notes: 'Comprar pastel',
     user: {
-    _id: '123',
-    name: 'Angoma'
+        _id: '123',
+        name: 'Angoma'
+    }
 }*/
 
 const initialState = {
@@ -62,6 +62,11 @@ export const calendarReducer = (state = initialState, action) => {
             return {
                 ...state,
                 events: [...action.payload]
+            }
+        /* Limpiar store de calendar hacer logout */
+        case types.eventLogout:
+            return {
+                ...initialState
             }
         default:
             return state;
