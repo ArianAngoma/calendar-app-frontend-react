@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 /* Importaciones propias */
 import {useForm} from '../../hooks/useForm';
 import {uiCloseModal} from '../../actions/ui';
-import {eventClearActiveEvent, eventStartAddNew, eventUpdated} from '../../actions/events';
+import {eventClearActiveEvent, eventStartAddNew, eventStartUpdate} from '../../actions/events';
 
 /* Estilos del DatePicker */
 import 'react-datepicker/dist/react-datepicker.css';
@@ -126,7 +126,8 @@ export const CalendarModal = () => {
 
         if (activeEvent) {
             /* Actualizar evento */
-            dispatch(eventUpdated(formValues));
+            // dispatch(eventUpdated(formValues)); -> antes de integrar con el backend
+            dispatch(eventStartUpdate(formValues));
         } else {
             /* Grabar un nuevo evento */
             dispatch(eventStartAddNew({

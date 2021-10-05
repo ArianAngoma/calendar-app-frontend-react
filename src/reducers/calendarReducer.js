@@ -1,5 +1,4 @@
 import {types} from '../types/types';
-import moment from 'moment';
 
 /*{
     id: idMongoDB,

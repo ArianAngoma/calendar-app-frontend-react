@@ -1,3 +1,5 @@
+import Swal from 'sweetalert2';
+
 /* Importaciones propias */
 import {types} from '../types/types';
 import {fetchWithToken} from '../helpers/fetch';
@@ -43,6 +45,31 @@ export const eventAddNew = (event) => ({
     type: types.eventAddNew,
     payload: event
 });
+
+/* Inicia la actualización del evento a la DB */
+export const eventStartUpdate = (event) => {
+    return async (dispatch) => {
+        try {
+            // console.log(event);
+            const resp = await fetchWithToken(`events/${event.id}`, event, 'PUT');
+            const data = await resp.json();
+            // console.log(data);
+            if (data.ok) {
+                dispatch(eventUpdated(event));
+            } else {
+                if (data.msg) Swal.fire('Error', data.msg, 'error');
+                else {
+                    for (const error in data.errors) {
+                        // console.log(data.errors[error].msg)
+                        Swal.fire('Error', data.errors[error].msg, 'error');
+                    }
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+}
 
 /* Actualizar evento */
 export const eventUpdated = (event) => ({
