@@ -54,10 +54,24 @@ export const startChecking = () => {
 /* Acción para finalizar la carga si el usuario esta logueado */
 export const checkingFinish = () => ({
     type: types.authCheckingFinish
-})
+});
 
 /* Acción para editar el store con el usuario logueado */
 export const login = (user) => ({
     type: types.authLogin,
     payload: user
 });
+
+/* Inicio del Logout - limpiar el localStorage */
+export const startLogout = () => {
+    return (dispatch) => {
+        localStorage.clear();
+
+        dispatch(logout());
+    }
+}
+
+/* Logout del usuario */
+export const logout = () => ({
+    type: types.authLogout
+})

@@ -23,6 +23,11 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 checking: false
             }
+        /* Logout del usuario - limpiar el store */
+        case types.authLogout:
+            return {
+                checking: false
+            }
         default:
             return state;
     }
