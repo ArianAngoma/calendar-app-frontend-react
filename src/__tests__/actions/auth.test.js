@@ -3,8 +3,9 @@ import thunk from 'redux-thunk';
 import Swal from 'sweetalert2';
 
 /* Importaciones propias */
-import {startLogin} from '../../actions/auth';
+import {startLogin, startRegister} from '../../actions/auth';
 import {types} from '../../types/types';
+import * as fetchModule from '../../helpers/fetch';
 
 /* Mock para el sweetalert2 */
 jest.mock('sweetalert2', () => ({
@@ -63,5 +64,33 @@ describe('Pruebas en las acciones Auth', () => {
         expect(actions).toEqual([]);
         expect(Swal.fire).toHaveBeenCalled();
         expect(Swal.fire).toHaveBeenCalledWith("Error", "No existe usuario con el email error@gmail.com", "error");
+    });
+
+    test('Debería de hacer la acción startRegister correctamente', async () => {
+        /* Mock del fetchNoToken */
+        fetchModule.fetchNoToken = jest.fn(() => ({
+            json() {
+                return {
+                    ok: true,
+                    uid: '123',
+                    name: 'Arian Angoma Vilchez',
+                    token: '123123123123'
+                }
+            }
+        }));
+
+        await store.dispatch(startRegister('test@test.com', '123456', 'test'));
+        const actions = store.getActions();
+        // console.log(actions);
+        expect(actions[0]).toEqual({
+            type: types.authLogin,
+            payload: {
+                uid: '123',
+                name: 'Arian Angoma Vilchez'
+            }
+        });
+
+        expect(localStorage.setItem).toHaveBeenCalledWith('token', '123123123123');
+        expect(localStorage.setItem).toHaveBeenCalledWith('token-init-date', expect.any(Number));
     });
 });
