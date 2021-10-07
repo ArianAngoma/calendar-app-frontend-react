@@ -1,9 +1,15 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import Swal from 'sweetalert2';
 
 /* Importaciones propias */
 import {startLogin} from '../../actions/auth';
 import {types} from '../../types/types';
+
+/* Mock para el sweetalert2 */
+jest.mock('sweetalert2', () => ({
+    fire: jest.fn()
+}));
 
 /* Configuración del Store */
 const middlewares = [thunk];
@@ -39,5 +45,23 @@ describe('Pruebas en las acciones Auth', () => {
         /* Obtener los datos del localStorage */
         // console.log(localStorage.setItem.mock.calls);
         // console.log(localStorage.setItem.mock.calls[0][1]);
+    });
+
+    test('Debería de hacer la acción startLogin incorrecto', async () => {
+        /* Password incorrecto */
+        await store.dispatch(startLogin('test1@gmail.com', 'error'));
+        let actions = store.getActions();
+        // console.log(actions);
+        expect(actions).toEqual([]);
+        expect(Swal.fire).toHaveBeenCalled();
+        expect(Swal.fire).toHaveBeenCalledWith("Error", "Password incorrecto", "error");
+
+        /* Email incorrecto */
+        await store.dispatch(startLogin('error@gmail.com', '123456'));
+        actions = store.getActions();
+        // console.log(actions);
+        expect(actions).toEqual([]);
+        expect(Swal.fire).toHaveBeenCalled();
+        expect(Swal.fire).toHaveBeenCalledWith("Error", "No existe usuario con el email error@gmail.com", "error");
     });
 });
