@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pruebas en <AppRouter/> Debería de mostrar el Loading 1`] = `
+<div
+  className="m-0 vh-100 row justify-content-center align-items-center"
+>
+  <div
+    className="spinner-border text-primary"
+  />
+</div>
+`;

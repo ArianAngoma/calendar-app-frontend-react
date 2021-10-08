@@ -27,8 +27,8 @@ const customStyles = {
     },
 };
 
-/* Configuración del Modal */
-Modal.setAppElement('#root');
+/* Configuración del Modal y el condicional para que las pruebas pasen */
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
 /* Configuración del idioma de DatePicker */
 registerLocale('es', es);
