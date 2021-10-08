@@ -5,6 +5,12 @@ import thunk from 'redux-thunk';
 
 /* Importaciones propias */
 import {DeleteEventFab} from '../../../components/ui/DeleteEventFab';
+import {eventStartDelete} from '../../../actions/events';
+
+/* Mock para la acción eventStartDelete */
+jest.mock('../../../actions/events', () => ({
+    eventStartDelete: jest.fn()
+}));
 
 /* Configuración del Store */
 const middlewares = [thunk];
@@ -26,5 +32,12 @@ const wrapper = mount(
 describe('Pruebas en el componente <DeleteEventFab/>', () => {
     test('Debería de mostrarse correctamente', () => {
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('Debería de llamar el evento handleDelete hacer click', () => {
+        /* Simular click */
+        wrapper.find('button').prop('onClick')();
+        expect(store.dispatch).toHaveBeenCalledTimes(1);
+        expect(eventStartDelete).toHaveBeenCalled();
     });
 });
