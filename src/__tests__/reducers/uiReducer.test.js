@@ -6,7 +6,7 @@ const initialState = {
     modalOpen: false
 }
 
-describe('Pruebas en reducer authReducer', () => {
+describe('Pruebas en reducer uiReducer', () => {
     test('Dbería de retornar el state por defecto', () => {
         const state = uiReducer(initialState, {});
         expect(state).toEqual(initialState);
