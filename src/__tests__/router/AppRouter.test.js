@@ -28,4 +28,51 @@ describe('Pruebas en <AppRouter/>', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('Debería de mostrar la ruta pública', () => {
+        /* Estado inicial del Store */
+        const initState = {
+            auth: {
+                checking: false,
+                uid: null
+            }
+        };
+        let store = mockStore(initState);
+
+        const wrapper = mount(
+            <Provider store={store}>
+                <AppRouter/>
+            </Provider>
+        );
+
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.login-container').exists()).toBe(true);
+    });
+
+    test('Debería de mostrar la ruta privada', () => {
+        /* Estado inicial del Store */
+        const initState = {
+            auth: {
+                checking: false,
+                uid: 123,
+                name: 'Arian'
+            },
+            calendar: {
+                events: []
+            },
+            ui: {
+                modalOpen: false
+            }
+        };
+        let store = mockStore(initState);
+
+        const wrapper = mount(
+            <Provider store={store}>
+                <AppRouter/>
+            </Provider>
+        );
+
+        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.find('.calendar-screen').exists()).toBe(true);
+    });
 });
