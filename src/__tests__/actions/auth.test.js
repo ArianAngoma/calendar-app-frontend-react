@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import Swal from 'sweetalert2';
 
 /* Importaciones propias */
-import {startLogin, startRegister} from '../../actions/auth';
+import {startChecking, startLogin, startRegister} from '../../actions/auth';
 import {types} from '../../types/types';
 import * as fetchModule from '../../helpers/fetch';
 
@@ -20,7 +20,10 @@ const mockStore = configureStore(middlewares);
 const initState = {};
 let store = mockStore(initState);
 
+/* Mock para el localStorage */
 Storage.prototype.setItem = jest.fn();
+
+let token;
 
 describe('Pruebas en las acciones Auth', () => {
     beforeEach(() => {
@@ -46,6 +49,9 @@ describe('Pruebas en las acciones Auth', () => {
         /* Obtener los datos del localStorage */
         // console.log(localStorage.setItem.mock.calls);
         // console.log(localStorage.setItem.mock.calls[0][1]);
+
+        /* Token para el localStorage */
+        token = localStorage.setItem.mock.calls[0][1];
     });
 
     test('Debería de hacer la acción startLogin incorrecto', async () => {
@@ -92,5 +98,31 @@ describe('Pruebas en las acciones Auth', () => {
 
         expect(localStorage.setItem).toHaveBeenCalledWith('token', '123123123123');
         expect(localStorage.setItem).toHaveBeenCalledWith('token-init-date', expect.any(Number));
+    });
+
+    test('Debería de hacer la acción startChecking correctamente', async () => {
+        /* Mock del fetchWithToken */
+        fetchModule.fetchWithToken = jest.fn(() => ({
+            json() {
+                return {
+                    ok: true,
+                    uid: '123',
+                    name: 'Arian Angoma Vilchez',
+                    token: '123123123123'
+                }
+            }
+        }));
+
+        await store.dispatch(startChecking());
+        const actions = await store.getActions();
+        // console.log(actions);
+        expect(actions[0]).toEqual({
+            type: types.authLogin,
+            payload: {
+                uid: '123',
+                name: 'Arian Angoma Vilchez'
+            }
+        });
+        expect(localStorage.setItem).toHaveBeenCalledWith('token', '123123123123');
     });
 });

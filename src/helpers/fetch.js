@@ -16,7 +16,7 @@ export let fetchNoToken = (endpoint, data, method = 'GET') => {
 }
 
 /* Fetch cuando requerimos el TOKEN */
-export const fetchWithToken = (endpoint, data, method = 'GET') => {
+export let fetchWithToken = (endpoint, data, method = 'GET') => {
     const url = `${baseUrl}/${endpoint}`;
     const token = localStorage.getItem('token') || '';
 
