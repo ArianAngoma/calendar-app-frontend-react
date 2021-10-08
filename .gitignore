@@ -4,6 +4,7 @@
 .idea
 .env.development
 .env.production
+.env.test
 
 # dependencies
 /node_modules
