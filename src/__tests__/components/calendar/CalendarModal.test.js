@@ -3,15 +3,24 @@ import {Provider} from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moment from 'moment';
+import {act} from '@testing-library/react';
+import DatePicker from 'react-datepicker';
+import Swal from 'sweetalert2';
 
 /* Importaciones propias */
 import {CalendarModal} from '../../../components/calendar/CalendarModal';
-import {eventStartUpdate, eventClearActiveEvent} from '../../../actions/events';
+import {eventStartUpdate, eventClearActiveEvent, eventStartAddNew} from '../../../actions/events';
 
 /* Mock para los eventos */
 jest.mock('../../../actions/events', () => ({
     eventStartUpdate: jest.fn(),
-    eventClearActiveEvent: jest.fn()
+    eventClearActiveEvent: jest.fn(),
+    eventStartAddNew: jest.fn()
+}));
+
+/* Mock del sweetalert2 */
+jest.mock('sweetalert2', () => ({
+    fire: jest.fn()
 }));
 
 /* Configuración del Store */
@@ -81,5 +90,78 @@ describe('Pruebas en el componente <CalendarModal/>', () => {
         });
 
         expect(wrapper.find('input[name="title"]').hasClass('is-invalid')).toBe(true);
+    });
+
+    test('Debería de crear un nuevo evento', () => {
+        /* Estado inicial del Store */
+        const initState = {
+            calendar: {
+                events: [],
+                activeEvent: null
+            },
+            auth: {
+                checking: false,
+                uid: '123',
+                name: 'Arian'
+            },
+            ui: {
+                modalOpen: true
+            }
+        };
+        let store = mockStore(initState);
+
+        /* Mock del store */
+        store.dispatch = jest.fn();
+
+        const wrapper = mount(
+            <Provider store={store}>
+                <CalendarModal/>
+            </Provider>
+        );
+
+        /* Simular el cambio de valor del título */
+        wrapper.find('input[name="title"]').simulate('change', {
+            target: {
+                name: 'title',
+                value: 'Hola Mundo'
+            }
+        });
+
+        /* Simular envio del formulario */
+        wrapper.find('form').simulate('submit', {
+            preventDefault() {
+            }
+        });
+
+        expect(eventStartAddNew).toHaveBeenLastCalledWith({
+            start: expect.anything(),
+            end: expect.anything(),
+            title: 'Hola Mundo',
+            notes: ''
+        });
+        expect(eventClearActiveEvent).toHaveBeenCalled();
+    });
+
+    test('Debería de validar las fechas', () => {
+        /* Simular el cambio de valor del título */
+        wrapper.find('input[name="title"]').simulate('change', {
+            target: {
+                name: 'title',
+                value: 'Hola Mundo'
+            }
+        });
+
+        const today = new Date();
+
+        act(() => {
+            wrapper.find(DatePicker).at(1).prop('onChange')(today);
+        });
+
+        wrapper.find('form').simulate('submit', {
+            preventDefault() {
+            }
+        });
+
+        expect(Swal.fire).toHaveBeenCalledWith("Error", "La fecha fin debe de ser mayor o igual a la fecha de inicio", "error");
     });
 });
