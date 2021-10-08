@@ -81,7 +81,7 @@ describe('Pruebas en las acciones Auth', () => {
 
         await store.dispatch(startRegister('test@test.com', '123456', 'test'));
         const actions = store.getActions();
-        // console.log(actions);
+        console.log(actions);
         expect(actions[0]).toEqual({
             type: types.authLogin,
             payload: {
