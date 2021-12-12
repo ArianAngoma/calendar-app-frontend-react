@@ -84,12 +84,20 @@ self.addEventListener('install', async (event) => {
     ]);
 });
 
+const apiOfflineFallbacks = [
+    `${process.env.REACT_APP_API_URL}/auth/renew-token`,
+    `${process.env.REACT_APP_API_URL}/events`
+]
+
 /* Proceso de fetch - cualquier petición HTTP */
 self.addEventListener('fetch', (event) => {
-    if (event.request.url !== `${process.env.REACT_APP_API_URL}/auth/renew-token`) return;
+    if (!apiOfflineFallbacks.includes(event.request.url)) return;
 
     const resp = fetch(event.request)
         .then(response => {
+            /* Si no viene la respuesta */
+            if (!response) return caches.match(event.request);
+
             /* Guardar en caché la respuesta */
             caches.open('cache-dynamic').then(cache => cache.put(event.request, response));
 
@@ -102,3 +110,4 @@ self.addEventListener('fetch', (event) => {
 
     event.respondWith(resp);
 });
+
