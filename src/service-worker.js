@@ -86,5 +86,19 @@ self.addEventListener('install', async (event) => {
 
 /* Proceso de fetch - cualquier petición HTTP */
 self.addEventListener('fetch', (event) => {
-    console.log(event.request.url);
+    if (event.request.url !== `${process.env.REACT_APP_API_URL}/auth/renew-token`) return;
+
+    const resp = fetch(event.request)
+        .then(response => {
+            /* Guardar en caché la respuesta */
+            caches.open('cache-dynamic').then(cache => cache.put(event.request, response));
+
+            return response.clone();
+        })
+        .catch(err => {
+            console.log('Offline response');
+            return caches.match(event.request);
+        });
+
+    event.respondWith(resp);
 });
