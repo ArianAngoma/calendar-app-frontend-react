@@ -71,6 +71,15 @@ self.addEventListener('message', (event) => {
 
 // Any other custom service worker logic can go here.
 
-self.addEventListener('install', (event) => {
-    console.log('instalando');
+/* Proceso de instalación del Service Worker */
+self.addEventListener('install', async (event) => {
+    /* Crear cache */
+    const cache = await caches.open('cache-1');
+
+    /* Añadir estos archivos estáticos al cache durante la instalanción del SW */
+    await cache.addAll([
+        'https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css',
+        '/favicon.ico'
+    ]);
 });
