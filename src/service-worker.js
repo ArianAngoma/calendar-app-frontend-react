@@ -83,3 +83,8 @@ self.addEventListener('install', async (event) => {
         '/favicon.ico'
     ]);
 });
+
+/* Proceso de fetch - cualquier petición HTTP */
+self.addEventListener('fetch', (event) => {
+    console.log(event.request.url);
+});
