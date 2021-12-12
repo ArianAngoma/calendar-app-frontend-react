@@ -32,7 +32,9 @@
     const isProduction = ('%NODE_ENV%' === 'production');
 
     if (isProduction && 'serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js');
+        navigator.serviceWorker.register('%PUBLIC_URL%/sw.js');
+    } else {
+        console.log('Not is production');
     }
 </script>
 </body>
