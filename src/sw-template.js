@@ -8,25 +8,45 @@ const {registerRoute} = workbox.routing;
 const {CacheFirst, NetworkFirst, NetworkOnly} = workbox.strategies;
 const {BackgroundSyncPlugin} = workbox.backgroundSync;
 
+const cacheNetworkFirst = [
+    '/api/auth/renew-token',
+    '/api/events'
+]
+
 registerRoute(
+    ({request, url}) => {
+        // console.log({request, url});
+        if (cacheNetworkFirst.includes(url.pathname)) return true;
+        return false;
+    },
+    new NetworkFirst()
+)
+
+/* Referencia */
+/*registerRoute(
     new RegExp('https://calendar-app-arianjs.herokuapp.com/api/auth/renew-token'),
     new NetworkFirst()
-)
+)*/
+
+const cacheFirst = [
+    'https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css'
+]
 
 registerRoute(
-    new RegExp('https://calendar-app-arianjs.herokuapp.com/api/events'),
-    new NetworkFirst()
+    ({request, url}) => {
+        // console.log({request, url});
+        if (cacheFirst.includes(url.href)) return true;
+        return false;
+    },
+    new CacheFirst()
 )
 
-registerRoute(
+/* Referencia */
+/*registerRoute(
     new RegExp('https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css'),
     new CacheFirst()
-)
-
-registerRoute(
-    new RegExp('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css'),
-    new CacheFirst()
-)
+)*/
 
 /* Post Offline */
 const bgSyncPlugin = new BackgroundSyncPlugin('posts-offline', {
