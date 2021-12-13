@@ -40,3 +40,19 @@ registerRoute(
     }),
     'POST'
 )
+
+registerRoute(
+    new RegExp('https://calendar-app-arianjs.herokuapp.com/api/events/'),
+    new NetworkOnly({
+        plugins: [bgSyncPlugin]
+    }),
+    'PUT'
+)
+
+registerRoute(
+    new RegExp('https://calendar-app-arianjs.herokuapp.com/api/events/'),
+    new NetworkOnly({
+        plugins: [bgSyncPlugin]
+    }),
+    'DELETE'
+)
