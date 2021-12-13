@@ -1,4 +1,5 @@
 import {useDispatch, useSelector} from 'react-redux';
+import {Offline, Online} from 'react-detect-offline';
 
 /* Importaciones propias */
 import {startLogout} from '../../actions/auth';
@@ -20,6 +21,13 @@ export const Navbar = () => {
             <span className="navbar-brand">
                 {name}
             </span>
+
+            <Online>
+                <span className="text-success">Online</span>
+            </Online>
+            <Offline>
+                <span className="text-danger">Offline - Peticiones serán guardadas</span>
+            </Offline>
 
             <button className="btn btn-outline-danger"
                     onClick={handleLogout}>
