@@ -1,9 +1,12 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
 
+workbox.loadModule('workbox-background-sync');
+
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
 const {registerRoute} = workbox.routing;
-const {CacheFirst, NetworkFirst} = workbox.strategies;
+const {CacheFirst, NetworkFirst, NetworkOnly} = workbox.strategies;
+const {BackgroundSyncPlugin} = workbox.backgroundSync;
 
 registerRoute(
     new RegExp('https://calendar-app-arianjs.herokuapp.com/api/auth/renew-token'),
@@ -23,4 +26,17 @@ registerRoute(
 registerRoute(
     new RegExp('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css'),
     new CacheFirst()
+)
+
+/* Post Offline */
+const bgSyncPlugin = new BackgroundSyncPlugin('posts-offline', {
+    maxRetentionTime: 24 * 60
+});
+
+registerRoute(
+    new RegExp('https://calendar-app-arianjs.herokuapp.com/api/events'),
+    new NetworkOnly({
+        plugins: [bgSyncPlugin]
+    }),
+    'POST'
 )
